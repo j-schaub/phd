@@ -1,0 +1,40 @@
+---
+title: "EcoBase Intro"
+author: "Jessica Schaub"
+date: "2023-02-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview
+
+This is a script to explore EcoBase. I am following the script provided (here)[http://ecobase.ecopath.org/].
+
+# Library and Data Loading
+
+```{r}
+library(RCurl)
+library(XML)
+library(tidyverse)
+library(plyr)
+```
+# Getting the list of availbale EwE models
+
+```{r}
+h=basicTextGatherer()
+curlPerform(url = 'http://sirs.agrocampus-ouest.fr/EcoBase/php/webser/soap-client_3.php',writefunction=h$update)
+
+data<-xmlTreeParse(h$value(),useInternalNodes=TRUE)
+liste_mod<-ldply(xmlToList(data),data.frame)%>% filter(model.dissemination_allow =='true')
+        
+#liste_mod contains a list and decription of available models in EcoBase
+```
+
+
+
+
+
+
